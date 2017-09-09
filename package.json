@@ -1,0 +1,22 @@
+{
+    "name": "nmap",
+    "version": "1.0.0",
+    "author": "",
+    "license": "ISC",
+    "browserify": {
+        "transform": [
+            "browserify-global-shim"
+        ]
+    },
+    "browserify-global-shim": {
+        "jQuery": "$",
+        "knockout": "ko"
+    },
+    "devDependencies": {
+        "browserify": "^14.4.0",
+        "browserify-global-shim": "^1.0.3",
+        "gulp": "^3.9.1",
+        "stringify": "^5.1.0",
+        "vinyl-source-stream": "^1.1.0"
+    }
+}
