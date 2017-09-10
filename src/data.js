@@ -1,20 +1,26 @@
 module.exports = [
     {
-        name: 'Onesta',
-        lat: '1',
-        long: '2',
+        name: 'Lou Han',
+        lat: '12.905169',
+        long: '77.650525',
         address: 'sector-1',
     },
     {
-        name: 'Pisco',
-        lat: '1',
-        long: '2',
+        name: 'Punjabi Tdka',
+        lat: '12.905169',
+        long: '77.650525',
         address: 'sector-1',
     },
     {
         name: 'Mish Mash',
-        lat: '1',
-        long: '2',
+        lat: '12.905169',
+        long: '77.650525',
+        address: 'sector-1',
+    },
+    {
+        name: 'Mughal Treat',
+        lat: '12.905169',
+        long: '77.650525',
         address: 'sector-1',
     }
 ];

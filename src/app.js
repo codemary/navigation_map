@@ -1,5 +1,7 @@
 var map;
 
+var defaultLocations = require('./data')
+
 function NeighbouthoodMapViewModel() {
     var self = this;
 
@@ -7,29 +9,8 @@ function NeighbouthoodMapViewModel() {
     this.init = function () {
         console.log("initialize app")
     }
-    this.locationQuery = ko.observable("")
-    this.locationsList = [
-        {
-            name: 'Onesta',
-            lat: '1',
-            long: '2',
-            address: 'sector-1',
-        },
-        {
-            name: 'Pisco',
-            lat: '1',
-            long: '2',
-            address: 'sector-1',
-        },
-        {
-            name: 'Mish Mash',
-            lat: '1',
-            long: '2',
-            address: 'sector-1',
-        }
-    ];
-
-
+    this.locationQuery = ko.observable("");
+    this.locationsList = defaultLocations;
 
     this.search = function () {
 
