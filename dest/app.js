@@ -7,11 +7,14 @@ function NeighbouthoodMapViewModel() {
     var self = this;
 
 
-    this.init = function () {
-        console.log("initialize app")
-    }
+
     this.locationQuery = ko.observable("");
     this.locationsList = defaultLocations;
+
+    this.init = function () {
+        this.createMarkers()
+    }
+
 
     this.search = function () {
 
@@ -22,13 +25,27 @@ function NeighbouthoodMapViewModel() {
 
     }
 
+    this.createMarkers = function () {
+        for (var i = 0; i < this.locationsList.length; i++) {
+            console.log(this.locationsList[i]);
+            var l = this.locationsList[i];
+            new google.maps.Marker({
+                map: map,
+                draggable: false,
+                animation: google.maps.Animation.DROP,
+                position: { lat: l.latLong[0], lng: l.latLong[1] }
+            });
+
+        };
+    }
+
     this.init()
 }
 
 window.InitApp = function () {
     map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 13,
-        center: { lat: 12.9716, lng: 77.5946 }
+        zoom: 15,
+        center: { lat: 12.9123302, lng: 77.6376689 }
     })
     ko.applyBindings(new NeighbouthoodMapViewModel());
 }
@@ -38,27 +55,23 @@ window.InitApp = function () {
 },{"./data":2}],2:[function(require,module,exports){
 module.exports = [
     {
-        name: 'Lou Han',
-        lat: '12.905169',
-        long: '77.650525',
+        name: 'Art Blend Cafe',
+        latLong: [12.9087497, 77.6503003],
         address: 'sector-1',
     },
     {
-        name: 'Punjabi Tdka',
-        lat: '12.905169',
-        long: '77.650525',
+        name: 'Hello Delhi',
+        latLong: [12.9123302, 77.6376689],
         address: 'sector-1',
     },
     {
         name: 'Mish Mash',
-        lat: '12.905169',
-        long: '77.650525',
+        latLong: [12.9120781, 77.6428719],
         address: 'sector-1',
     },
     {
-        name: 'Mughal Treat',
-        lat: '12.905169',
-        long: '77.650525',
+        name: 'Tomatina',
+        latLong: [12.9117236, 77.6449431],
         address: 'sector-1',
     }
 ];

@@ -1,26 +1,22 @@
 module.exports = [
     {
-        name: 'Lou Han',
-        lat: '12.905169',
-        long: '77.650525',
+        name: 'Art Blend Cafe',
+        latLong: [12.9087497, 77.6503003],
         address: 'sector-1',
     },
     {
-        name: 'Punjabi Tdka',
-        lat: '12.905169',
-        long: '77.650525',
+        name: 'Hello Delhi',
+        latLong: [12.9123302, 77.6376689],
         address: 'sector-1',
     },
     {
         name: 'Mish Mash',
-        lat: '12.905169',
-        long: '77.650525',
+        latLong: [12.9120781, 77.6428719],
         address: 'sector-1',
     },
     {
-        name: 'Mughal Treat',
-        lat: '12.905169',
-        long: '77.650525',
+        name: 'Tomatina',
+        latLong: [12.9117236, 77.6449431],
         address: 'sector-1',
     }
 ];
