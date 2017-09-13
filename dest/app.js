@@ -11,6 +11,9 @@ function NeighbouthoodMapViewModel() {
     this.locationQuery = ko.observable("");
     this.locationsList = defaultLocations;
 
+    this.mapInfoWindow = new google.maps.InfoWindow();
+    this.markers = [];
+
     this.init = function () {
         this.createMarkers()
     }
@@ -25,19 +28,33 @@ function NeighbouthoodMapViewModel() {
 
     }
 
+
     this.createMarkers = function () {
         for (var i = 0; i < this.locationsList.length; i++) {
             console.log(this.locationsList[i]);
             var l = this.locationsList[i];
-            new google.maps.Marker({
+            var marker = new google.maps.Marker({
                 map: map,
                 draggable: false,
                 animation: google.maps.Animation.DROP,
                 position: { lat: l.latLong[0], lng: l.latLong[1] }
             });
+            // create info window
+            google.maps.event.addListener(marker, 'click', (function (marker, infowindow) {
+                return function () {
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                    setTimeout(function () { marker.setAnimation(null); }, 4000);
+                    infowindow.setContent(l.address);
+                    infowindow.open(map, marker);
+                    setTimeout(function () { infowindow.close(); }, 4000);
+                };
+            })(marker, this.mapInfoWindow));
 
-        };
-    }
+            this.markers.push(marker)
+
+        }
+
+    };
 
     this.init()
 }
@@ -73,6 +90,12 @@ module.exports = [
         name: 'Tomatina',
         latLong: [12.9117236, 77.6449431],
         address: 'sector-1',
+    },
+    {
+        name: 'Corner House',
+        latLong: [12.9097348, 77.6500869],
+        address: 'sector-1',
     }
+
 ];
 },{}]},{},[1]);
