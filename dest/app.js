@@ -40,15 +40,20 @@ function NeighbouthoodMapViewModel() {
                 position: { lat: l.latLong[0], lng: l.latLong[1] }
             });
             // create info window
-            google.maps.event.addListener(marker, 'click', (function (marker, infowindow) {
+            google.maps.event.addListener(marker, 'click', (function (marker, address, infowindow) {
                 return function () {
                     marker.setAnimation(google.maps.Animation.BOUNCE);
                     setTimeout(function () { marker.setAnimation(null); }, 4000);
-                    infowindow.setContent(l.address);
+                    var htmlAddress = '<div class="card">' +
+                        '<div class="card-body">' +
+                        '<p>' + address + '</p>' +
+                        '</div>' +
+                        '</div>'
+                    infowindow.setContent(htmlAddress);
                     infowindow.open(map, marker);
                     setTimeout(function () { infowindow.close(); }, 4000);
                 };
-            })(marker, this.mapInfoWindow));
+            })(marker, l.address, this.mapInfoWindow));
 
             this.markers.push(marker)
 
@@ -79,22 +84,22 @@ module.exports = [
     {
         name: 'Hello Delhi',
         latLong: [12.9123302, 77.6376689],
-        address: 'sector-1',
+        address: 'sector-2',
     },
     {
         name: 'Mish Mash',
         latLong: [12.9120781, 77.6428719],
-        address: 'sector-1',
+        address: 'sector-3',
     },
     {
         name: 'Tomatina',
         latLong: [12.9117236, 77.6449431],
-        address: 'sector-1',
+        address: 'sector-5',
     },
     {
         name: 'Corner House',
         latLong: [12.9097348, 77.6500869],
-        address: 'sector-1',
+        address: 'sector-4',
     }
 
 ];

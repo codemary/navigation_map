@@ -39,15 +39,20 @@ function NeighbouthoodMapViewModel() {
                 position: { lat: l.latLong[0], lng: l.latLong[1] }
             });
             // create info window
-            google.maps.event.addListener(marker, 'click', (function (marker, infowindow) {
+            google.maps.event.addListener(marker, 'click', (function (marker, address, infowindow) {
                 return function () {
                     marker.setAnimation(google.maps.Animation.BOUNCE);
                     setTimeout(function () { marker.setAnimation(null); }, 4000);
-                    infowindow.setContent(l.address);
+                    var htmlAddress = '<div class="card">' +
+                        '<div class="card-body">' +
+                        '<p>' + address + '</p>' +
+                        '</div>' +
+                        '</div>'
+                    infowindow.setContent(htmlAddress);
                     infowindow.open(map, marker);
                     setTimeout(function () { infowindow.close(); }, 4000);
                 };
-            })(marker, this.mapInfoWindow));
+            })(marker, l.address, this.mapInfoWindow));
 
             this.markers.push(marker)
 
