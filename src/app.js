@@ -11,12 +11,11 @@ function NeighbouthoodMapViewModel() {
     this.mapInfoWindow = new google.maps.InfoWindow();
     this.markers = [];
 
-    defaultLocations.forEach(function (item) {
-        self.locationsList.push(item);
-    });
-
 
     this.init = function () {
+        defaultLocations.forEach(function (item) {
+            self.locationsList.push(item);
+        });
         this.createMarkers()
     }
 
@@ -26,6 +25,11 @@ function NeighbouthoodMapViewModel() {
         console.log(this.locationQuery().toLowerCase())
 
         self.locationsList.removeAll()
+
+        // hide all markers
+        self.markers.forEach(function (markerObj) {
+            markerObj.marker.setVisible(false);
+        });
 
         var filterLocations = function (locationsList, query) {
             return locationsList.filter(function (el) {
@@ -39,6 +43,13 @@ function NeighbouthoodMapViewModel() {
         console.log(filteredLocationsList)
 
         filteredLocationsList.forEach(function (item) {
+            //show markers
+            self.markers.forEach(function (markerObj) {
+                if (markerObj.name === item.name) {
+                    markerObj.marker.setVisible(true)
+                }
+
+            });
             self.locationsList.push(item);
         });
 
@@ -52,9 +63,9 @@ function NeighbouthoodMapViewModel() {
 
 
     this.createMarkers = function () {
-        for (var i = 0; i < this.locationsList.length; i++) {
-            console.log(this.locationsList[i]);
-            var l = this.locationsList[i];
+        for (var i = 0; i < this.locationsList().length; i++) {
+            console.log(this.locationsList()[i]);
+            var l = this.locationsList()[i];
             var marker = new google.maps.Marker({
                 map: map,
                 draggable: false,
@@ -62,12 +73,13 @@ function NeighbouthoodMapViewModel() {
                 position: { lat: l.latLong[0], lng: l.latLong[1] }
             });
             // create info window
-            google.maps.event.addListener(marker, 'click', (function (marker, address, infowindow) {
+            google.maps.event.addListener(marker, 'click', (function (marker, name, address, infowindow) {
                 return function () {
                     marker.setAnimation(google.maps.Animation.BOUNCE);
                     setTimeout(function () { marker.setAnimation(null); }, 4000);
                     var htmlAddress = '<div class="card">' +
                         '<div class="card-body">' +
+                        '<p>' + name + '</p>' +
                         '<p>' + address + '</p>' +
                         '</div>' +
                         '</div>'
@@ -75,9 +87,9 @@ function NeighbouthoodMapViewModel() {
                     infowindow.open(map, marker);
                     setTimeout(function () { infowindow.close(); }, 4000);
                 };
-            })(marker, l.address, this.mapInfoWindow));
+            })(marker, l.name, l.address, this.mapInfoWindow));
 
-            this.markers.push(marker)
+            self.markers.push({ "name": l.name, "marker": marker })
 
         }
 
