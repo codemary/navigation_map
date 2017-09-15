@@ -5,29 +5,42 @@ var defaultLocations = require('./data')
 function NeighbouthoodMapViewModel() {
     var self = this;
 
-
-
     this.locationQuery = ko.observable("");
-    this.locationsList = defaultLocations;
+    this.locationsList = ko.observableArray([]);
 
     this.mapInfoWindow = new google.maps.InfoWindow();
     this.markers = [];
+
+    defaultLocations.forEach(function (item) {
+        self.locationsList.push(item);
+    });
+
 
     this.init = function () {
         this.createMarkers()
     }
 
 
+
     this.search = function () {
         console.log(this.locationQuery().toLowerCase())
 
+        self.locationsList.removeAll()
+
         var filterLocations = function (locationsList, query) {
             return locationsList.filter(function (el) {
+                console.log("name", el.name)
                 return el.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
             })
         }
 
-        this.locationsList = filterLocations(this.locationsList, this.locationQuery())
+        var filteredLocationsList = filterLocations(defaultLocations, this.locationQuery())
+
+        console.log(filteredLocationsList)
+
+        filteredLocationsList.forEach(function (item) {
+            self.locationsList.push(item);
+        });
 
     }
 
