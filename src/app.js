@@ -19,6 +19,15 @@ function NeighbouthoodMapViewModel() {
 
 
     this.search = function () {
+        console.log(this.locationQuery().toLowerCase())
+
+        var filterLocations = function (locationsList, query) {
+            return locationsList.filter(function (el) {
+                return el.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+            })
+        }
+
+        this.locationsList = filterLocations(this.locationsList, this.locationQuery())
 
     }
 
@@ -26,6 +35,7 @@ function NeighbouthoodMapViewModel() {
     this.locationItemClicked = function () {
 
     }
+
 
 
     this.createMarkers = function () {
