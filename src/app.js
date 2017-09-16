@@ -1,6 +1,6 @@
 var map;
 
-var defaultLocations = require('./data')
+//var initialLocations = require('./data')
 
 var clientId = '350C4NRLGJT02Y5S4AFOWBZSB4CUGQ4JS05QQ5QVXULBSPA4';
 
@@ -13,6 +13,10 @@ function NeighbouthoodMapViewModel() {
 
     this.locationQuery = ko.observable("");
     this.locationsList = ko.observableArray([]);
+    this.defaultLocations = [];
+    // initialLocations.forEach(function (item) {
+    //     self.defaultLocations.push(item);
+    // });
 
     this.mapInfoWindow = new google.maps.InfoWindow();
     this.markers = [];
@@ -27,10 +31,7 @@ function NeighbouthoodMapViewModel() {
 
     this.fourSquareUrlParams = $.param(self.fourSquareParams);
 
-    this.init = function () {
-        defaultLocations.forEach(function (item) {
-            self.locationsList.push(item);
-        });
+    this.getFoursquareData = function () {
         $.getJSON(fourSquareUrl + self.fourSquareUrlParams).done(function (data) {
             $.each(data.response.venues, function (i, venue) {
                 console.log(venue);
@@ -40,11 +41,20 @@ function NeighbouthoodMapViewModel() {
                     address: venue.location.address,
                 }
 
+                self.defaultLocations.push(locationItem);
                 self.locationsList.push(locationItem);
-
-
             });
         });
+    };
+
+    this.init = function () {
+
+        self.defaultLocations.forEach(function (item) {
+            self.locationsList.push(item);
+        });
+        this.getFoursquareData();
+
+
         this.createMarkers()
     }
 
@@ -67,7 +77,7 @@ function NeighbouthoodMapViewModel() {
             })
         }
 
-        var filteredLocationsList = filterLocations(defaultLocations, this.locationQuery())
+        var filteredLocationsList = filterLocations(self.defaultLocations, this.locationQuery())
 
         console.log(filteredLocationsList)
 
