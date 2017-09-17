@@ -33,11 +33,16 @@ function NeighbouthoodMapViewModel() {
     this.getFoursquareData = function () {
         $.getJSON(fourSquareUrl + self.fourSquareUrlParams).done(function (data) {
             $.each(data.response.venues, function (i, venue) {
-                // console.log(venue);
+                console.log(venue);
+                var address = '';
+                venue.location.formattedAddress.forEach(function (el) {
+                    address = address + ' ' + el;
+                });
+
                 var locationItem = {
                     name: venue.name,
                     latLong: [venue.location.lat, venue.location.lng],
-                    address: venue.location.address,
+                    address: address,
                 }
 
                 self.defaultLocations.push(locationItem);

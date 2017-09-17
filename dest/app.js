@@ -34,11 +34,16 @@ function NeighbouthoodMapViewModel() {
     this.getFoursquareData = function () {
         $.getJSON(fourSquareUrl + self.fourSquareUrlParams).done(function (data) {
             $.each(data.response.venues, function (i, venue) {
-                // console.log(venue);
+                console.log(venue);
+                var address = '';
+                venue.location.formattedAddress.forEach(function (el) {
+                    address = address + ' ' + el;
+                });
+
                 var locationItem = {
                     name: venue.name,
                     latLong: [venue.location.lat, venue.location.lng],
-                    address: venue.location.address,
+                    address: address,
                 }
 
                 self.defaultLocations.push(locationItem);
@@ -120,7 +125,6 @@ function NeighbouthoodMapViewModel() {
                 '<div class="iw-heading">' + name + '</div>' +
                 '<div class="iw-body">' +
                 '<p>' + address + '</p>' +
-
                 '</div>' +
                 '<img src="images/Powered-by-Foursquare-full-color-300.png" width="50%" height="50%"></img>' +
                 '</div>'
