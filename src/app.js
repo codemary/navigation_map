@@ -178,4 +178,4 @@ window.InitApp = function () {
 
 window.googleError = function () {
     alert("Error loading google maps!");
-}
+};
