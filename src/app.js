@@ -1,6 +1,6 @@
 var map;
 
-//var initialLocations = require('./data')
+var initialLocations = require('./data')
 
 var clientId = '350C4NRLGJT02Y5S4AFOWBZSB4CUGQ4JS05QQ5QVXULBSPA4';
 
@@ -15,9 +15,7 @@ function NeighbouthoodMapViewModel() {
     this.locationQuery = ko.observable("");
     this.locationsList = ko.observableArray([]);
     this.defaultLocations = [];
-    // initialLocations.forEach(function (item) {
-    //     self.defaultLocations.push(item);
-    // });
+
 
     this.mapInfoWindow = new google.maps.InfoWindow();
     this.markers = [];
@@ -46,6 +44,15 @@ function NeighbouthoodMapViewModel() {
                 self.locationsList.push(locationItem);
                 self.createMarker(locationItem)
             });
+        }).fail(function () {
+            // show hard coded locations if foursqaure api fails
+            console.log("error")
+            initialLocations.forEach(function (locationItem) {
+                self.defaultLocations.push(locationItem);
+                self.locationsList.push(locationItem);
+                self.createMarker(locationItem)
+            });
+
         });
     };
 
