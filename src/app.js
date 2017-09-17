@@ -12,13 +12,18 @@ var fourSquareUrl = 'https://api.foursquare.com/v2/venues/search?'
 function NeighbouthoodMapViewModel() {
     var self = this;
 
-    this.locationQuery = ko.observable("");
+    // set locationQuery and locationsList as observable to be bound to the view
+    this.locationQuery = ko.observable('');
     this.locationsList = ko.observableArray([]);
-    this.defaultLocations = [];
 
+    this.locationsDataList = [];
 
+    // get infowindow object form google maps api
     this.mapInfoWindow = new google.maps.InfoWindow();
+
     this.markers = [];
+
+    // build foursquare api params
     this.fourSquareParams = {
         categoryId: '4d4b7105d754a06374d81259',
         radius: 2000,
@@ -30,6 +35,8 @@ function NeighbouthoodMapViewModel() {
 
     this.fourSquareUrlParams = $.param(self.fourSquareParams);
 
+    // this function fetches venues from the foursquare venues api and updates the
+    // locationsList observable. It also creates a marker for each shown venue
     this.getFoursquareData = function () {
         $.getJSON(fourSquareUrl + self.fourSquareUrlParams).done(function (data) {
             $.each(data.response.venues, function (i, venue) {
@@ -45,15 +52,14 @@ function NeighbouthoodMapViewModel() {
                     address: address,
                 }
 
-                self.defaultLocations.push(locationItem);
+                self.locationsDataList.push(locationItem);
                 self.locationsList.push(locationItem);
                 self.createMarker(locationItem)
             });
         }).fail(function () {
             // show hard coded locations if foursqaure api fails
-            console.log("error")
             initialLocations.forEach(function (locationItem) {
-                self.defaultLocations.push(locationItem);
+                self.locationsDataList.push(locationItem);
                 self.locationsList.push(locationItem);
                 self.createMarker(locationItem)
             });
@@ -61,20 +67,23 @@ function NeighbouthoodMapViewModel() {
         });
     };
 
+
+    // initialize the app
     this.init = function () {
 
-        self.defaultLocations.forEach(function (item) {
+        self.locationsDataList.forEach(function (item) {
             self.locationsList.push(item);
         });
+        // fetch foursquare venues data
         this.getFoursquareData();
 
     }
 
 
-
+    // this function is bound to the input field. The input field is bound to the locationQuery observable
     this.search = function () {
-        //console.log(this.locationQuery().toLowerCase())
 
+        // remove all locations from the locationsList observable
         self.locationsList.removeAll()
 
         // hide all markers
@@ -82,17 +91,16 @@ function NeighbouthoodMapViewModel() {
             markerObj.marker.setVisible(false);
         });
 
+        // filter out locations from the locationsDataList which match the query
         var filterLocations = function (locationsList, query) {
             return locationsList.filter(function (el) {
-                // console.log("name", el.name)
                 return el.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
             })
         }
 
-        var filteredLocationsList = filterLocations(self.defaultLocations, this.locationQuery())
+        var filteredLocationsList = filterLocations(self.locationsDataList, this.locationQuery())
 
-        // console.log(filteredLocationsList)
-
+        // push the filtered locations to locationsList observable and show the related markers
         filteredLocationsList.forEach(function (item) {
             //show markers
             self.markers.forEach(function (markerObj) {
@@ -106,6 +114,7 @@ function NeighbouthoodMapViewModel() {
 
     }
 
+    // show marker when location list item is clicked
     this.locationItemClicked = function (item) {
         var marker;
         self.markers.forEach(function (markerObj) {
@@ -116,10 +125,11 @@ function NeighbouthoodMapViewModel() {
         self.onMarkerClick(marker, item.name, item.address, self.mapInfoWindow)()
     }
 
+    // handles marker click and animation. it also creates a infowindow. 
     this.onMarkerClick = function (marker, name, address, infowindow) {
         return function () {
             marker.setAnimation(google.maps.Animation.BOUNCE);
-            setTimeout(function () { marker.setAnimation(null); }, 4000);
+            setTimeout(function () { marker.setAnimation(null); }, 2000);
             var htmlAddress = '<div id="iw-container">' +
                 '<div class="iw-heading">' + name + '</div>' +
                 '<div class="iw-body">' +
@@ -129,11 +139,12 @@ function NeighbouthoodMapViewModel() {
                 '</div>'
             infowindow.setContent(htmlAddress);
             infowindow.open(map, marker);
-            setTimeout(function () { infowindow.close(); }, 4000);
+            setTimeout(function () { infowindow.close(); }, 2000);
         };
     }
 
 
+    // creates a marker
     this.createMarker = function (l) {
         var marker = new google.maps.Marker({
             map: map,
@@ -143,13 +154,14 @@ function NeighbouthoodMapViewModel() {
         });
         // create info window
         google.maps.event.addListener(marker, 'click', self.onMarkerClick(marker, l.name, l.address, this.mapInfoWindow));
-
-        self.markers.push({ "name": l.name, "marker": marker })
+        // store markers by name
+        self.markers.push({ 'name': l.name, 'marker': marker })
     };
 
     this.init()
 }
 
+// callback function for the google maps api
 window.InitApp = function () {
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 15,

@@ -1,4 +1,9 @@
-### Setup
+## Neighborhood Map
+
+This is a simple application which fetches nearby restaurants and shows them on a map. Restaurants can be further
+filtered by a search query.
+
+## Setup
 
 ```
 $ git clone https://github.com/codemary/navigation_map.git
@@ -9,6 +14,7 @@ $ gulp
 $ open index.html
 ```
 
-Foursquare API is being used to get more information about a place.
+Foursquare API is being used to fetch nearby restaurants. Google Maps is being used for showing the restaurants on 
+a map.
 
 
