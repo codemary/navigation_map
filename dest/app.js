@@ -116,11 +116,13 @@ function NeighbouthoodMapViewModel() {
         return function () {
             marker.setAnimation(google.maps.Animation.BOUNCE);
             setTimeout(function () { marker.setAnimation(null); }, 4000);
-            var htmlAddress = '<div class="card">' +
-                '<div class="card-body">' +
-                '<p>' + name + '</p>' +
+            var htmlAddress = '<div id="iw-container">' +
+                '<div class="iw-heading">' + name + '</div>' +
+                '<div class="iw-body">' +
                 '<p>' + address + '</p>' +
+
                 '</div>' +
+                '<img src="images/Powered-by-Foursquare-full-color-300.png" width="50%" height="50%"></img>' +
                 '</div>'
             infowindow.setContent(htmlAddress);
             infowindow.open(map, marker);

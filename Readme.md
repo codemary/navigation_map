@@ -9,5 +9,6 @@ $ gulp
 $ open index.html
 ```
 
+Foursquare API is being used to get more information about a place.
 
 
