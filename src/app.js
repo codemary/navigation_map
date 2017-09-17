@@ -14,7 +14,11 @@ function NeighbouthoodMapViewModel() {
 
     // set locationQuery and locationsList as observable to be bound to the view
     this.locationQuery = ko.observable('');
+    this.errorMessage = ko.observable('');
+    this.showErrorMessage = ko.observable(false);
     this.locationsList = ko.observableArray([]);
+
+
 
     this.locationsDataList = [];
 
@@ -40,7 +44,6 @@ function NeighbouthoodMapViewModel() {
     this.getFoursquareData = function () {
         $.getJSON(fourSquareUrl + self.fourSquareUrlParams).done(function (data) {
             $.each(data.response.venues, function (i, venue) {
-                console.log(venue);
                 var address = '';
                 venue.location.formattedAddress.forEach(function (el) {
                     address = address + ' ' + el;
@@ -56,8 +59,12 @@ function NeighbouthoodMapViewModel() {
                 self.locationsList.push(locationItem);
                 self.createMarker(locationItem);
             });
-        }).fail(function () {
+        }).fail(function (jqxhr, textStatus, error) {
             // show hard coded locations if foursqaure api fails
+            var err = textStatus + ", " + error;
+            console.log("Error loading foursquare data ", err);
+            self.errorMessage("Error loading data from Foursquare!");
+            self.showErrorMessage(true);
             initialLocations.forEach(function (locationItem) {
                 self.locationsDataList.push(locationItem);
                 self.locationsList.push(locationItem);
@@ -139,7 +146,6 @@ function NeighbouthoodMapViewModel() {
                 '</div>';
             infowindow.setContent(htmlAddress);
             infowindow.open(map, marker);
-            setTimeout(function () { infowindow.close(); }, 2000);
         };
     };
 
@@ -170,4 +176,6 @@ window.InitApp = function () {
     ko.applyBindings(new NeighbouthoodMapViewModel());
 };
 
-
+window.googleError = function () {
+    alert("Error loading google maps!");
+}
